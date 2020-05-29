@@ -1,0 +1,41 @@
+{% extends "reportTabs.html" %}
+
+{% block extrahead %}
+<script src="{{STATIC_URL}}zabuto-cal/zabuto_calendar.js"></script>
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}zabuto-cal/zabuto_calendar.min.css">
+{% endblock %}
+
+   {% block extraheadreporttab  %}
+   <style type="text/css">
+   	#submenu li a {
+   		font-size: 130%;   		
+   	}
+   	
+    #reportTabs li a:hover, #reportTabs li a:focus, #reportTabs  li.active a {
+   		color:rgb(255, 102, 0) ;   		
+   	}
+
+    #reportTabs li a {
+   		color:orange ;   		
+   	}   	
+   </style>
+   
+   {% endblock %}
+
+{% block afterscripts %} 
+
+<script type="application/javascript">
+    
+
+    $(document).ready(function () {
+    	var eventData_0 =  {{ assistencia_calendari |safe }};
+        $("#div_0").zabuto_calendar({
+        	data: eventData_0,
+        	language: "ca"
+        	});
+    });
+    
+</script>
+{% endblock %}
+
+

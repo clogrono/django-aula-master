@@ -1,0 +1,69 @@
+Llicència: 
+
+    This file is part of django-aula ('djAu').
+
+    Copyright © 2011-TODAY . Daniel Herrera ctrl.alt.d@gmail.com - Institut Cendrassos - Figueres. 
+    
+    Aquest copyright forma part del programa, no es pot alterar i 
+    ha d'acompanyar el programa de manera visible. 
+    There is NO WARRANTY, to the extent permitted by law. 
+    EL PROGRAMA NO TÉ CAP GARANTIA, 
+    MÉS ENLLÀ DE LES EXIGIDES PER LES LLEIS APLICABLES.
+    
+    El programa es diu django-aula, s'escriu 'djAu' i es pronuncia 'dijau'.
+
+    django-aula ('djAu') is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    any later version.
+
+    django-aula ('djAu') is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    EL PROGRAMA NO TÉ CAP GARANTIA, MÉS ENLLÀ DE LES EXIGIDES PER
+    LES LLEIS APLICABLES.
+    
+    El copyright forma part de la llicència i django-aula ('djAu')
+
+    You should have received a copy of the GNU General Public License
+    along with django-aula ('djAu').  If not, see <http://www.gnu.org/licenses/>.
+    
+    Crèdits, col·laboradors i special thanks:
+    
+       Daniel Herrera ( ctrl.alt.d@gmail.com )
+       'Some time, Some code
+
+       Joan Rodríguez ( jrodr236@gmail.com ) 2013-2015
+       'Migració UI a Bootstrap3 i Responsive design.
+       'Millores en processos i estructures
+ 
+       Xavi Sala
+       'Dibuix error 500
+
+       JaumeI ( JaumeI@gmail.com ) & David Llop ( d.lloople@gmail.com ) 2014
+       'workflow de promoció/canvi manual de grup
+
+       Xevi Terradellas ( xeviterr@gmail.com ) 2014 -
+       'Millores en gestió d'alumnes i grups
+       'Testos
+       
+       Juaky Rubio ( juaky73@gmail.com ) 2017-
+       'Migració a django 1.11
+       'Mòdul reserva d'aules
+       'Buscadors de persones ( alumnes, professors )
+       'Adaptació a Esfer@
+       'Fotos alumnes
+       
+       Quim Saurina ( jsaurina@xtec.cat ) 2018 -
+       'Aportacions a la documentació.
+       
+       Jordi Subias ( jsubias6@xtec.cat ) 2018
+       'Millores parametritzacions
+
+       Toni Morillas (amorilla@xtec.cat) 2019
+       'Migració Python3
+       'Extensió Untis
+       
+

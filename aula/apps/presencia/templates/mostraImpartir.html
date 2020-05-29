@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+
+
+ 
+{% block extrahead %}
+  <style type="text/css">
+    .row-padded {
+      padding: 1px;
+      border-bottom: 1px solid black;
+    }
+    .col-xs-12 {
+      text-align: center;
+    }
+    .col-sm-2 {
+      text-align: center;
+    } 
+  </style>
+{% endblock %}
+ 
+{% block content  %}
+	<p class="well well-small">
+  	<span class="glyphicon glyphicon-user"></span> {{ professor }}
+  </p>
+	
+	<div class="row" style="padding-bottom: 5px;">
+	  <div class="col-sm-2 col-xs-12"></div>
+	  {% for dia_setmana, dia_complet, esDataActual in calendari %}
+	  <div class="col-sm-2 col-xs-12 {% if not esDataActual %}hidden-xs{% endif %}">
+		  <h4>
+		    <span class="label label-info">
+		      <strong>{{ dia_setmana }} {{ dia_complet }}</strong>
+		    </span>
+	    </h4>
+	  </div>
+	  {% endfor %}
+	</div>
+
+    {% for impartir_franja in impartir_tot %}
+    <div class="row text_center" style="padding-top: 5px;{% if forloop.counter|divisibleby:2 %}background-color: #F0F0F0;{% endif %}">
+
+
+        {% for imparticions, esDataActual in impartir_franja %}
+            <div class="col-sm-2 col-xs-12 {% if forloop.counter != 1 and not esDataActual %}hidden-xs{% endif %}"   >
+              {% for assignatura, grup, aula, pk, color, color2, resum, esGuardia, hi_ha_sortida, esReservaManual in imparticions %}
+                <div class="imparticio" style="padding-bottom: 5px; margin-left:5px; margin-right: 5px;" >
+                  {%if esGuardia%}
+                   <div style="border: 1px solid gray;">
+                      <div style="text-align: right;background-color: white;">
+                       -Guardia- <a style="color:#444444;" href="/presencia/esborraGuardia/{{pk}}">[&times;]</a>
+                      </div>
+                  {%endif%}
+                  {%if grup %}
+                    
+                    	<div style="background-color:{{color}}">
+                    		<a href="/presencia/passaLlista/{{pk}}">
+                                {% if esReservaManual %}
+                                    <div style="font-style: italic;">
+                                {% endif %}
+                                {{ assignatura }} {{ aula }} {{ grup }}</br>
+                                {% if esReservaManual %}
+                                    </div>
+                                {% endif %}
+                    		</a>
+                    		<span class="label label-{{color2}}">{{ resum }}</span>
+                    		{%if hi_ha_sortida %}
+                    			<span class="glyphicon glyphicon-plane"></span>
+                    		{%endif%}
+                    		</br>
+                        </div>
+                    														
+                  {%else%}
+                  	<div style="background-color:{{color}}">
+                        {% if esReservaManual %}
+                            <div style="font-style: italic;">
+                        {% endif %}
+                        {{ assignatura }} {{ aula }} {{ grup }}</br>
+                        {% if esReservaManual %}
+                            </div>
+                        {% endif %}
+                    </div>
+                  {%endif%}
+                  {%if esGuardia%}
+                    </div>
+                  {%endif%}
+                </div>
+              {% empty %}
+              <span class="hidden-xs">-----------</span>
+              {% endfor %}
+
+            </div>                          
+               
+        {% endfor %}
+    </div>
+    {% endfor %}
+
+
+	<div class="row">
+	  <div class="col-sm-2 col-xs-12"></div>
+	  {% for dia_setmana, dia_complet, esDataActual in calendari %}
+		  <div class="col-sm-2 {% if not esDataActual %}hidden-xs{% endif %}">
+		     <a href="/presencia/afegeixGuardia/{{dia_complet}}">+guardia</a>
+		  </div>
+	  {% endfor %}
+	</div>
+
+  <!-- Cal fer dos bucles per a que es mostri bé -->
+  <ul class="pagination visible-xs">
+	  {% for  moment, altre_data, visiblePhone, visibleTabletiDesktop in altres_moments %}
+      {% if visiblePhone %}
+        <li>
+          <a href="/presencia/mostraImpartir/{{altre_data.year}}/{{altre_data.month}}/{{altre_data.day}}/">{{moment}}</a>
+        </li>
+      {% endif %}
+    {% endfor %}
+	</ul>
+	<ul class="pagination hidden-xs">
+	  {% for  moment, altre_data, visiblePhone, visibleTabletiDesktop in altres_moments %}
+      {% if visibleTabletiDesktop %}
+        <li>
+          <a href="/presencia/mostraImpartir/{{altre_data.year}}/{{altre_data.month}}/{{altre_data.day}}/">{{moment}}</a>
+        </li>
+      {% endif %}      
+    {% endfor %}
+	</ul>
+{% endblock %}
+

@@ -1,0 +1,102 @@
+{% extends "form.html" %}
+
+	{% block preform %}
+	<div class="row">
+		{% if form.instance.pk %}
+			<div class="col-sm-4  col-xs-12label_tag">
+	          <p class="text-right hidden-xs">
+	          	<label for="id_estat">Participació</label>
+	          </p>
+              <p class="visible-xs">
+              	<label for="id_estat">Participació</label>
+              </p>
+	          
+	        </div>
+			<div class="col-sm-8 col-xs-12 tria_tag">
+				{{ form.instance.participacio }}
+			</div>
+		{% endif %}
+	</div>
+	
+	{% endblock %}
+
+
+	{% block postform  %}
+	
+	<script type="text/javascript">
+	
+	
+	$(document).ready(function() {
+
+		$("#id_professors_responsables").select2();
+	    $("#id_altres_professors_acompanyants").select2();
+
+		$( "#id_data_inici" ).change(function() {
+		  actualitzaDatesCalendari();
+		});
+		
+		$( "#id_franja_inici" ).change(function() {
+		  actualitzaDatesCalendari();
+		});
+		
+		$( "#id_data_fi" ).change(function() {
+		  actualitzaDatesCalendari();
+		});
+		
+		$( "#id_franja_fi" ).change(function() {
+		  actualitzaDatesCalendari();
+		});
+		
+		$('#datetime_id_data_inici').bind('changeDate', actualitzaDatesCalendari);
+
+	});
+				
+	function actualitzaDatesCalendari() {
+		
+		valor_franja = $("#id_franja_inici option:selected").text();
+		desti_desde_en_blanc = $("#id_calendari_desde" ).val().length === 0;
+		data_origen_desde_informat = $( "#id_data_inici" ).val().length > 3;
+		temps_origen_desde_informat = valor_franja.length > 3 && valor_franja.substring(0,3) != "---";
+				
+		if( desti_desde_en_blanc) {
+			if (data_origen_desde_informat && temps_origen_desde_informat ) {
+				$("#id_calendari_desde" ).val( $( "#id_data_inici" ).val() +  ' ' + valor_franja.substring(0,5) );
+			} else {
+				$("#id_calendari_desde" ).val( '' );
+			}
+		}
+
+		valor_franja = $("#id_franja_fi option:selected").text();
+		desti_finsa_en_blanc = $("#id_calendari_finsa" ).val().length === 0;
+		data_origen_finsa_informat = $( "#id_data_fi" ).val().length > 3;
+		temps_origen_finsa_informat = valor_franja.length > 3 && valor_franja.substring(0,3) != "---";
+				
+		if( desti_finsa_en_blanc) {
+			if (data_origen_finsa_informat && temps_origen_finsa_informat ) {
+				$("#id_calendari_finsa" ).val( $( "#id_data_fi" ).val() +  ' ' + valor_franja.substring(8,13) );
+			} else {
+				$("#id_calendari_finsa" ).val( '' );
+			}
+		}
+
+	}
+
+
+	$(document).ready(function() {
+		if ({{deshabilitat}}) {
+			$('#label_id_estat_0').attr('disabled','disabled');
+			$('#label_id_estat_1').attr('disabled','disabled');
+			$('#label_id_estat_2').attr('disabled','disabled');
+			$('#label_id_estat_3').attr('disabled','disabled');
+			
+			$('.date .input-group-addon').hide();
+			
+			$(':submit').hide();
+		}
+	});
+
+    		 
+	</script>
+	
+	{% endblock %}
+

@@ -1,0 +1,50 @@
+{% extends "formset.html" %}
+
+{% block extrahead %} 
+
+<script>
+
+	function norecordatoris() {	
+	  {% for f in formset %}
+	     {% if f.opcio.value == 'r' %}
+	     	$('#id_{{f.prefix}}-opcio_1').prop("checked", true);
+	     {% endif %}
+	     {% if f.opcio.value %}
+	     	$('#id_{{f.prefix}}-opcio_2').parent().parent().remove();
+	     {% endif %}
+		
+	  {% endfor %}
+    }
+    
+    function noimprimirres() {
+      {% for f in formset %}
+        $('#id_{{f.prefix}}-opcio_1').prop("checked", true);
+      {% endfor %}
+    }
+
+    $(document).ready(
+    function($){    
+      $("#noPrintRecordatori").click(function(){
+    	norecordatoris();
+      });
+      $("#noPrintRes").click(function(){
+    	noimprimirres();
+      });
+    });
+    
+</script>	
+
+{% endblock %}
+
+{% block preform  %}
+	  {% if missatge %}
+		  <div class="info">
+            {{missatge}}
+          </div>
+	  {% endif %}
+	  <p>
+	  <a class="btn btn-info" id="noPrintRecordatori">No imprimir recordatoris</a>
+	  <a class="btn btn-info" id="noPrintRes">Selecci&oacute; manual</a>
+	  </p>
+{% endblock %}
+

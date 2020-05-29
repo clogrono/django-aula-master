@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+ 
+{% block content  %}
+	<h1>Carregar el fitxer csv d'alumnes del Saga</h1>
+	<form action="." method="post" enctype="multipart/form-data">{% csrf_token %}
+		 {{ form }}
+		 <input type="submit" value="Upload">
+	</form>
+	<h2>Recorda que els camps a enviar són</h2>
+	<ul>
+	<li>
+	<pre>
+Camps:		
+	"00_IDENTIFICADOR DE L'ALUMNE/A",
+	"01_NOM",
+	"02_DATA NAIXEMENT",
+	"03_RESPONSABLE 1",
+	"04_TELÈFON RESP. 1",
+	"05_MÒBIL RESP. 1",
+	"06_ADREÇA ELECTR. RESP. 1",
+	"07_RESPONSABLE 2",
+	"08_TELÈFON RESP. 2",
+	"09_MÒBIL RESP. 2",
+	"10_ADREÇA ELECTR. RESP. 2",
+	"11_ADREÇA",
+	"12_LOCALITAT",
+	"13_MUNICIPI",
+	"14_CORREU ELECTRÒNIC",
+	"15_ALTRES TELÈFONS",
+	"16_CENTRE PROCEDÈNCIA",
+	"17_GRUPSCLASSE",
+	"18_DOC. IDENTITAT",
+	"19_CP"
+	</pre>
+	</li>
+	</ul>
+{% endblock %}

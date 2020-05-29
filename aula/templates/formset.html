@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block extrahead %} {% endblock %}
+
+{% block head %}
+  {{ head }}
+{% endblock %}
+
+{% block content  %}
+  {% block preform  %}
+	  {% if missatge %}
+		  <div class="info">
+		    {{missatge}}
+		  </div>
+	  {% endif %}
+	{% endblock %}
+	
+	{%if titol_formulari %}<h2>{{titol_formulari}}</h2>{%endif%}
+
+  <form method="post" action="" enctype="multipart/form-data">{% csrf_token %}
+    {{ formset.management_form }}
+    {% for form in formset %}    
+      
+        {%if form.formSetDelimited %}
+           <div class="row" style="height:5px; border-bottom:1px solid black;margin-bottom: 5px;"> </div> 
+           <!-- TODO: Cal pensar com fer això amb bootstrap, i si cal -->
+           <!--tr style='background-color:black; height='10'><td colspan='2' style='background-color:black; height='10'></td></tr-->
+        {% endif %}
+
+        {% for hidden in form.hidden_fields %}
+          {{ hidden }}
+        {% endfor %}
+
+		{% if form.non_field_errors %}
+        <div class="row" style="background-color:{% cycle '#f5f5f5' 'white' %}">
+          	  <div class="alert alert-danger">
+              <button type="button" class="close" data-dismiss="alert">&times;</button>
+              {% for error in form.non_field_errors %}
+                  {{error}}
+              {% endfor %}
+              </div>
+        </div>
+        {% endif %}
+          
+        {% for label, value in form.infoForm %}
+        <div class="row row-padded" style="background-color:{% cycle '#f5f5f5' 'white' %}">
+	        <div class="col-sm-4 col-xs-12 label_tag">
+	        	{{ label }}:
+	        </div>
+	        <div class="col-sm-8 col-xs-12 ">      
+	          {{ value }}
+      		</div>
+      	</div>
+	    {% endfor %}
+
+        {% for field in form.visible_fields %}
+        <div class="row row-padded" style="background-color:{% cycle '#f5f5f5' 'white' %}">
+	        <div class="col-sm-4 col-xs-12 label_tag">
+	          <p class="text-right hidden-xs">
+	          	{{ field.label_tag }}
+	          </p>
+              <p class="visible-xs">
+              	{{ field.label_tag }}
+              	{% if field.help_text %}
+	              	<button type="button" class="btn btn-info btn-xs" data-container="body" data-toggle="popover" data-placement="bottom" data-content="{{ field.help_text }}">
+					  <span class="glyphicon glyphicon-info-sign"></span>
+					</button>
+				{% endif %}
+              </p> 
+	        </div>
+	        <div class="col-sm-8 col-xs-12 tria_tag">
+	            {{ field }}
+	            {% if field.help_text %}
+	            <p class="hidden-xs"><em>{{ field.help_text }}</em></p>	        
+	            {% endif %}
+		        {% if field.errors %}		        	
+			        <div class="alert alert-danger">
+			        <button type="button" class="close" data-dismiss="alert">&times;</button>
+				        <ul>
+				          {% for error in field.errors%}
+				          <li>{{ error }}</li>
+			              {% endfor %}
+			            </ul>
+		         	</div>
+		        {% endif %}
+	        </div>
+        </div>
+        {% endfor %}
+
+        {%if formSetDelimited %}
+        {% endif %}       
+    {% endfor %}
+    {% if formset %}
+    <div class="row row-padded" >
+    	<div class="col-sm-12 tria_tag" style="margin-top:15px;margin-bottom:15px;">
+      		<button type="submit" class="btn btn-primary">Enviar dades</button>
+      </div>
+    </div>
+  	{% endif %}
+  </form>
+  {% block postform  %} {% endblock %}
+  
+  <script  type="text/javascript">
+  $(document).ready(function() {
+    $("textarea").css("width", "100%")
+   });
+  </script>
+
+
+{% endblock %}

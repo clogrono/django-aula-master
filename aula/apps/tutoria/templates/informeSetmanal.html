@@ -1,0 +1,446 @@
+{% extends "base.html" %}
+
+{% block extrahead  %}
+
+<style type="text/css">
+.vertical{
+    writing-mode:tb-rl;
+    white-space:nowrap;
+    display:block;
+    bottom:0px;
+    width:15px;
+    height:15px;
+}
+.td-vertical{
+    height: 40px;
+}
+.label-incidencia{
+	background-color:#995599
+}
+.label-expulsio{
+	background-color:#33dd00
+}
+.label-informativa{
+	background-color:#998899
+}
+.container{
+	margin-left:0px;
+}
+</style>
+
+<script>
+// Create the tooltips only on document load
+$(document).ready(function() 
+{
+   {% for x in dades.f %}
+   $('#f{{x.pk}}').tooltip(
+   {
+      title: 'falta: {{x.impartir.horari.assignatura|escapejs}}, Prof.: {{x.professor|escapejs}}'
+   });
+   {% endfor %}   
+
+   {% for x in dades.r %}
+   $('#r{{x.pk}}').tooltip(
+   {
+      title: 'retard: {{x.impartir.horari.assignatura|escapejs}}, Prof.: {{x.professor|escapejs}}'
+   });
+   {% endfor %}  
+      
+   {% for x in dades.j %}
+   $('#j{{x.pk}}').tooltip(
+   {
+      title: 'falta justificada: {{x.impartir.horari.assignatura|escapejs}}, Prof.: {{x.professor|escapejs}}'
+   });
+   {% endfor %}  
+      
+   {% for x in dades.I %}
+   $('#I{{x.pk}}').tooltip(
+   {
+      title: 'Incidència: (Prof.:{{x.professional|escapejs}}, Assig: {% if x.es_incidencia_d_aula %}{{x.control_assistencia.impartir.horari.assignatura|escapejs}} {% else %} Fora d\'aula {% endif %}) - {{x.descripcio_incidencia|escapejs}}'
+   });
+   {% endfor %}  
+      
+   {% for x in dades.i %}
+   $('#i{{x.pk}}').tooltip(
+   {
+      title: 'Incidència informativa: (Prof.:{{x.professional|escapejs}}, Assig: {% if x.es_incidencia_d_aula %}{{x.control_assistencia.impartir.horari.assignatura|escapejs}} {% else %} Fora d'aula {% endif %}) - {{x.descripcio_incidencia|escapejs}}'
+   });
+   {% endfor %}  
+      
+   {% for x in dades.E %}
+   $('#E{{x.pk}}').tooltip(
+   {
+      title: 'Expulsió: (Prof.: {{x.professor|escapejs}}, {{x.coltrol_assistencia.impartir.horari.assignatura|escapejs}}) - {{x.motiu|escapejs}}'
+   });
+   {% endfor %}  
+      
+   {% for x in dades.e %}
+   $('#e{{x.pk}}').tooltip(
+   {
+      title: 'expulsió per acumulació d\u0027incidències: (Prof: {{x.professor|escapejs}}) - {{x.motiu|escapejs}}'
+   });
+   {% endfor %}  
+      
+   {% for x in dades.c %}
+      {% if x.professor %}
+   $('#c{{x.pk}}').tooltip(
+   {
+      title: 'Prof.: {{x.professor|escapejs}}'
+   });
+      {% endif %}
+   {% endfor %}  
+});
+</script>
+
+
+<script type="text/javascript">
+      $(document).ready(
+      function($){
+          $("#activar-info").click(function(){
+            if($(this).is(':checked')) {
+              $(".label").each(function () {
+                if ($(this).hasClass('etiq-info')) {
+                  $(this).removeClass("hidden");
+                }
+              })
+            }
+            else {
+              $(".label").each(function () {
+                if ($(this).hasClass('etiq-info')) {
+                  $(this).addClass("hidden");
+                }
+              })
+            }
+          });
+          
+          $("#activar-falta").click(function(){
+            if($(this).is(':checked')) {
+              $(".label").each(function () {
+                if ($(this).hasClass('etiq-falta')) {
+                  $(this).removeClass("hidden");
+                }
+              })
+            }
+            else {
+              $(".label").each(function () {
+                if ($(this).hasClass('etiq-falta')) {
+                  $(this).addClass("hidden");
+                }
+              })
+            }
+          });
+          
+          $("#activar-retras").click(function(){
+            if($(this).is(':checked')) {
+              $(".label").each(function () {
+                if ($(this).hasClass('etiq-retras')) {
+                  $(this).removeClass("hidden");
+                }
+              })
+            }
+            else {
+              $(".label").each(function () {
+                if ($(this).hasClass('etiq-retras')) {
+                  $(this).addClass("hidden");
+                }
+              })
+            }
+          });
+          
+          $("#activar-justificada").click(function(){
+            if($(this).is(':checked')) {
+              $(".label").each(function () {
+                if ($(this).hasClass('etiq-justificada')) {
+                  $(this).removeClass("hidden");
+                }
+              })
+            }
+            else {
+              $(".label").each(function () {
+                if ($(this).hasClass('etiq-justificada')) {
+                  $(this).addClass("hidden");
+                }
+              })
+            }
+          });
+          
+          $("#activar-incidencia").click(function(){
+            if($(this).is(':checked')) {
+              $(".label").each(function () {
+                if ($(this).hasClass('etiq-incidencia')) {
+                  $(this).removeClass("hidden");
+                }
+              })
+            }
+            else {
+              $(".label").each(function () {
+                if ($(this).hasClass('etiq-incidencia')) {
+                  $(this).addClass("hidden");
+                }
+              })
+            }
+          });
+          
+          $("#activar-informativa").click(function(){
+            if($(this).is(':checked')) {
+              $(".label").each(function () {
+                if ($(this).hasClass('etiq-informativa')) {
+                  $(this).removeClass("hidden");
+                }
+              })
+            }
+            else {
+              $(".label").each(function () {
+                if ($(this).hasClass('etiq-informativa')) {
+                  $(this).addClass("hidden");
+                }
+              })
+            }
+          });
+          
+          $("#activar-expulsio").click(function(){
+            if($(this).is(':checked')) {
+              $(".label").each(function () {
+                if ($(this).hasClass('etiq-expulsio')) {
+                  $(this).removeClass("hidden");
+                }
+              })
+            }
+            else {
+              $(".label").each(function () {
+                if ($(this).hasClass('etiq-expulsio')) {
+                  $(this).addClass("hidden");
+                }
+              })
+            }
+          });
+          
+          $("#activar-acumulacio").click(function(){
+            if($(this).is(':checked')) {
+              $(".label").each(function () {
+                if ($(this).hasClass('etiq-acumulacio')) {
+                  $(this).removeClass("hidden");
+                }
+              })
+            }
+            else {
+              $(".label").each(function () {
+                if ($(this).hasClass('etiq-acumulacio')) {
+                  $(this).addClass("hidden");
+                }
+              })
+            }
+          });
+          
+      });
+</script>
+
+
+
+{% endblock %}
+
+{% block content  %}
+
+<h1 class="visible-print-block visible-print">Informe de tutoria, grup {{dades.grup}}</h1>
+
+<table class="table table-striped table-bordered table-condensed" >
+ <tr>
+  <td><strong>{{dades.grup}}</strong>
+  </td>
+  {% for dia, hores in dades.dia_hores.itemsEnOrdre %}
+  <td style="text-align:center; border-left-width: 2px; border-left-color: #999999;"  colspan="{{ hores.compte }}" >
+  		<strong>{{ dia }}</strong> 
+  </td>
+  {% endfor %}
+  <td style="border-left-width: 2px; border-left-color: #999999;"><strong>{{dades.grup}}</strong>
+  </td>
+ </tr>
+ 
+ <tr>
+  <td><em>Alumnes</em>
+  </td>
+  {% for dia, hores in dades.dia_hores.itemsEnOrdre %}
+  	{% for hora in hores %}
+  		<td class="td-vertical" style="font-size:80%; text-align:center;
+  			{% if hora == hores.0 %}border-left-width: 2px; border-left-color: #999999;{% endif %}
+  		">
+  			<div class="vertical"><em>{{hora.text_hora_inici}}</em></div>
+  		</td>
+  	{% endfor %}
+  {% endfor %}
+  <td style="border-left-width: 2px; border-left-color: #999999;"><em>Alumnes</em>
+ </tr>
+ 
+  {% for alumne,filera in dades.quadre.itemsEnOrdre %}
+  <tr>
+  <td>
+  	<div style="width:150px; overflow:hidden">{{alumne}}</div>
+  </td>
+  {% for cella in filera %}
+  
+  <td style="text-align:center; vertical-align:middle; padding: 0px 0px 0px 0px; background-color:{{cella.color}};
+  		{% if cella.primera_hora %} border-left-width: 2px; border-left-color: #999999;{% endif %}"
+  >
+  		{% for x in cella.f %}
+  		   <span id="f{{x.pk}}" style="font:bold; padding:0,1,0,0; font-family: monospace;" class="label etiq-falta label-danger">F</span>
+  		{% endfor %}
+  		{% for x in cella.r %}
+  		   <span id="r{{x.pk}}" style="font:bold; padding:0,1,0,0; font-family: monospace;" class="label etiq-retras label-warning">r</span>
+  		{% endfor %}
+  		{% for x in cella.j %}
+  		   <span id="j{{x.pk}}" style="font:bold; padding:0,1,0,0; font-family: monospace;" class="label etiq-justificada label-info">J</span>
+  		{% endfor %}
+  		{% for x in cella.I %}
+  		   <span id="I{{x.pk}}" style="font:bold; padding:0,1,0,0; font-family: monospace;" class="label etiq-incidencia label-incidencia">I</span>
+  		{% endfor %}
+  		{% for x in cella.i %}
+  		   <span id="i{{x.pk}}" style="font:bold; padding:0,1,0,0; font-family: monospace;" class="label etiq-informativa label-informativa">i</span>
+  		{% endfor %}
+  		{% for x in cella.E %}
+  		   <span id="E{{x.pk}}" style="font:bold; padding:0,1,0,0; font-family: monospace;" class="label etiq-expulsio label-expulsio">E</span>
+  		{% endfor %}
+  		{% for x in cella.e %}
+  		   <span id="e{{x.pk}}" style="font:bold; padding:0,1,0,0; font-family: monospace;" class="label etiq-acumulacio label-expulsio">e</span>
+  		{% endfor %}
+  		{% for x in cella.c  %}
+  		   {% if x.professor %}
+  		   <span id="c{{x.pk}}" style="font-size: 8px; padding:0,1,0,0; font-family: monospace;"  class="label etiq-info label-default hidden">i</span>
+  		   {% endif %}
+  		{% endfor %}
+  </td>
+  {% endfor %}
+  <td style="border-left-width: 2px; border-left-color: #999999;">
+  	<div style="width:150px; overflow:hidden">{{alumne}}</div>
+  </td>
+ </tr>
+ {% endfor %}
+ 
+  <tr>
+  <td><em>Alumnes</em>
+  </td>
+  {% for dia, hores in dades.dia_hores.itemsEnOrdre %}
+  	{% for hora in hores %}
+  		<td class="td-vertical" style="font-size:80%; text-align:center;
+  			{% if hora == hores.0 %}border-left-width: 2px; border-left-color: #999999;{% endif %}
+  		">
+  			<div class="vertical"><em>{{hora.text_hora_inici}}</em></div>
+  		</td>
+  	{% endfor %}
+  {% endfor %}
+  <td style="border-left-width: 2px; border-left-color: #999999;"><em>Alumnes</em>
+ </tr>
+ 
+  <tr>
+  <td><strong>{{dades.grup}}</strong>
+  </td>
+  {% for dia, hores in dades.dia_hores.itemsEnOrdre %}
+  <td style="text-align:center;border-left-width: 2px; border-left-color: #999999;"  colspan="{{ hores.compte }}" >
+  		<strong>{{ dia }}</strong> 
+  </td>
+  {% endfor %}
+  <td style="border-left-width: 2px; border-left-color: #999999;"><strong>{{dades.grup}}</strong>
+  </td>
+ </tr>
+ 
+ </table>
+ 
+  <div class="well well-sm hidden-print">
+    <p>
+      <strong>Llegenda</strong>
+    </p>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+          <p>
+            <em>Comportament</em>
+          </p>
+          <p>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" id="activar-expulsio" checked>
+                <span class="label label-expulsio">E</span> Expulsi&oacute;
+              </label>
+           </div>
+          </p>
+          <p>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" id="activar-acumulacio" checked>
+                <span class="label label-expulsio">e</span> Expulsi&oacute; per acum. d'incid&egrave;ncies
+              </label>
+            </div>
+          </p>
+          <p>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" id="activar-incidencia" checked>
+                <span class="label label-incidencia">I</span> Incid&egrave;ncia no informativa
+              </label>
+            </div>
+          </p>
+          <p>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" id="activar-informativa" checked>
+                <span class="label label-informativa">i</span> Incid&egrave;ncia informativa
+              </label>
+            </div>
+          </p>
+        </div>
+        <div class="col-md-3">
+          <p>
+            <em>Assist&egrave;ncia</em>
+          </p>
+          <p>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" id="activar-falta" checked>
+                <span class="label label-danger">F</span> Falta
+              </label>
+            </div>
+          </p>
+          <p>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" id="activar-retras" checked>
+                <span class="label label-warning">r</span> Retard
+              </label>
+            </div>
+          </p>
+          <p>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" id="activar-justificada" checked>
+                <span class="label label-info">J</span> Justificada
+              </label>
+            </div>
+          </p>
+          <p>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" id="activar-info">
+                <span class="label label-default">i</span> Informaci&oacute;
+              </label>
+            </div>
+          </p>
+        </div>
+        <div class="col-md-5">
+          <p>
+            <em>Estat control assist&egrave;ncia</em>
+          </p>
+          <table>
+            <tr>
+              <td style="background-color:#505050;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+              <td>&nbsp;L'alumne no està a cap llista</td>
+            </tr>
+            <tr>
+              <td style="background-color:#E0E0E0;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+              <td>&nbsp;El professor encara no ha passat llista</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

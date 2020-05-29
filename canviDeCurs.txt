@@ -1,0 +1,115 @@
+djAu no és multi curs per decissió de disseny. 
+
+Hi ha dos opcions per iniciar nou curs:
+* Clonar la base de dades i esborrar el del curs passat 
+* Fer una base de dades nova i portar de la vella el que calgui. Jo aposto per la segona opció.
+
+*** Opció fer net (recomenada) ***
+
+- crear una base de dades nova
+- feu una instal·lació neta creant les taules amb el syncdb i instal·lant les fixtures per defecte
+- parametritzar ( incidències i sancions amb el corresponent .odt )  **TODO: apuntar quines són**
+- crear els grups a partir d'exportació cronowin ( des de la web )
+- modificar inici-fi de curs per cursos i afegir festius ( des de la web )
+- (opcional) Si volem passar llista des del primer dia llavors cal importar els alumnes i promocionar-los.
+- (opcional) Quan tinguem els alumnes a la bd nova: a la base de dades del curs passat fer el resum anual i 
+  passar-lo a la base de dades nova (es pot fer un cop engegat el curs, no hi ha presssa)
+
+  from aula.apps.tutoria.others import calculaResumAnualProcess
+  calculaResumAnualProcess()
+
+  --: sentències per passar les taules de la base de dades vella a la nova i posar els comptadors al id que toqui.
+
+  tutoria_seguimenttutorial
+  tutoria_seguimenttutorialpreguntes
+  tutoria_seguimenttutorialrespostes
+  tutoria_resumanualalumne
+
+
+#esborrar les taules;
+for TAULA in    tutoria_seguimenttutorialpreguntes tutoria_seguimenttutorialrespostes tutoria_resumanualalumne tutoria_seguimenttutorial
+do
+  psql -U ghap2015 -d ghap2015 -c "delete from ${TAULA};"; 
+done;
+  
+#passar les dades velles a la nova:
+for TAULA in   tutoria_seguimenttutorial tutoria_seguimenttutorialpreguntes tutoria_seguimenttutorialrespostes tutoria_resumanualalumne
+do
+  ( psql -U ghap2014 -d ghap2014 -c "copy (select * from $TAULA) to stdout with csv HEADER" ) \
+  |  psql -U ghap2015 -d ghap2015 -c "copy ${TAULA} from stdin csv HEADER; update tutoria_seguimenttutorial set alumne_id=null;" 
+done;
+
+#posar els ID's al màxim:
+for TAULA in   tutoria_seguimenttutorial tutoria_seguimenttutorialpreguntes tutoria_seguimenttutorialrespostes tutoria_resumanualalumne
+do
+  psql -U ghap2015 -d ghap2015 -c "SELECT setval('${TAULA}_id_seq', COALESCE((SELECT MAX(id)+1 FROM ${TAULA}), 1), false);";
+done;
+
+
+  ----- Connectar i desconnectar capceleres de seguiment tutorial -----
+  --Les capceleres de tutoria (SeguimentTutorial) es poden desconectar de l'Alumne:
+
+
+  Per tonar-los a connectar (un cop importat des de la base de dades del curs passat):
+
+  --Buscar els possibles repetits:
+  select array_agg( a.id ),
+      unaccent(a.nom), 
+      unaccent(a.cognoms), 
+      a.data_neixement 
+   from tutoria_seguimenttutorial a
+   group by 
+      unaccent(a.nom), 
+      unaccent(a.cognoms), 
+      a.data_neixement
+  having count(*) > 1;
+
+  delete from tutoria_resumanualalumne where seguiment_tutorial_id in (5420, 5419, 5301 );
+  delete from tutoria_seguimenttutorial where id in (5420, 5419, 5301 );  
+ 
+  --Amb SQL:
+   update tutoria_seguimenttutorial
+   set alumne_id = alumnes_alumne.id
+   from alumnes_alumne
+   where unaccent(alumnes_alumne.nom) = unaccent(tutoria_seguimenttutorial.nom) and 
+      unaccent(alumnes_alumne.cognoms) = unaccent(tutoria_seguimenttutorial.cognoms) and
+      alumnes_alumne.data_neixement = tutoria_seguimenttutorial.data_neixement and
+      alumnes_alumne.data_baixa is null;
+
+   update tutoria_seguimenttutorial
+   set 
+      alumne_id = alumnes_alumne.id,
+      data_neixement = alumnes_alumne.data_neixement
+   from alumnes_alumne
+   where unaccent(alumnes_alumne.nom) = unaccent(tutoria_seguimenttutorial.nom) and 
+      unaccent(alumnes_alumne.cognoms) = unaccent(tutoria_seguimenttutorial.cognoms) and
+      alumne_id is null;
+      
+   --esborrar les que han quedat sense alumne ( perquè l'alumne ja no és al centre)
+   delete from tutoria_resumanualalumne where seguiment_tutorial_id in ( select id from tutoria_seguimenttutorial where alumne_id is null);
+   delete from tutoria_seguimenttutorialrespostes where seguiment_tutorial_id in ( select id from tutoria_seguimenttutorial where alumne_id is null);  
+   delete from tutoria_seguimenttutorial where alumne_id is null;
+
+  --Amb models django:
+  ( todo )
+
+
+*** Opció clonar (no recomenada) ***
+
+(Todo) Cal esborrar al menys: 
+
+	Presencia: controls d'assistència, imparticions
+	Alumnes: alumne, grup, curs, nivell
+	Usuaris: (tots excepte equip directiu )
+	Horaris: horaris i festius
+	Kronowin: Franja2Aula, Grup2Aula
+	Saga: Grup2Aula
+	Baixes: Feina
+	Qualitativa: AvaluacioQualitativa, RespostaAvaluacioQualitativa
+	Missatgeria: Destinatari, DetallMissatge, Missatge
+	Incidències: Sancio, Expulsio, Incidencia
+	Assignatures: Assignatura
+	
+Cal revisar arbre: nivell, curs, grup, ...
+Cal fer els lligams assignatures django amb assignatures noves del kronowin.
+
