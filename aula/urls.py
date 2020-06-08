@@ -54,6 +54,8 @@ urlpatterns = [
     url(r'^site-css/(?P<path>.*)$', serve,{'document_root': site_media_site_css}),
     url(r'^error500$', TemplateView.as_view(template_name='500.html') ),
     url('^private-media/', include(private_storage.urls)),
+    url(r'^descarregues/', include('aula.apps.descarregues.urls')),
+
 
 ]
 
