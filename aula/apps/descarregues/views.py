@@ -1,6 +1,6 @@
 """
     views for the descarregues option
-"""
+""" 
 
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
@@ -17,11 +17,13 @@ def descarregaAlumnes(request):
     if request.method == 'POST':
         form = descarregaAlumnesForm(request.POST)
         if form.is_valid():
-            return compose_alumnes_csv_response()
+            selected_tutors = form.cleaned_data.get('tutors')
+            return compose_alumnes_csv_response(
+                filtres={ 'tutors': selected_tutors})
     else:
         form = descarregaAlumnesForm()
 
-    return render(request,
+        return render(request,
                   'form.html',
                   {'form': form, 'head': 'Descarrega'}
                   )
