@@ -50,7 +50,7 @@ def compose_alumnes_csv_response(filtres=None):
 
     return response
 
-def  composa_opcions_grups():
+def  composa_opcions_tutors():
     """ returns a list with the groups as a tuple (display name, group) """
     opcio_tots = [ (_OPCIO_TOTS, _OPCIO_TOTS) ]
     return opcio_tots + [(t.professor.last_name, t.professor.last_name)
